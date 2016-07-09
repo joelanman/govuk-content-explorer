@@ -75,7 +75,7 @@ router.get('/search', function(req, res){
     var searchData = JSON.parse(searchResponse);
     viewData.results = searchData.results;
 
-    log(viewData.results);
+    // log(viewData.results);
 
     return request("https://www.gov.uk/api/search.json?facet_format=1000&count=0");
 
@@ -94,6 +94,32 @@ router.get('/search', function(req, res){
     });
 
     viewData.formats.sort(function(a,b){
+      if (a.name > b.name){
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    return request("https://www.gov.uk/api/search.json?facet_organisations=1000&count=0");
+
+  }).then(function(organisationsResponse){
+
+    var organisationsData = JSON.parse(organisationsResponse);
+
+    log(organisationsData);
+
+    viewData.organisations = organisationsData.facets.organisations.options.map(function(facet){
+      if (facet.value.title){
+        return {
+          'name' : facet.value.title,
+          'slug' : facet.value.slug,
+          'count': facet.documents
+        };
+      }
+    });
+
+    viewData.organisations.sort(function(a,b){
       if (a.name > b.name){
         return 1;
       } else {

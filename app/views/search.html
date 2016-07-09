@@ -11,6 +11,21 @@
 
     <div class="column-third">
 
+      <h2 class="heading-small">Organisations</h2>
+
+      <ul class="list">
+
+        {% for organisation in organisations %}
+
+          <li>
+            <a class="font-xsmall" href="{{organisation.slug}}">{{organisation.name}}</a>
+            <span class="count font-xsmall">{{organisation.count}}</span>
+          </li>
+
+        {% endfor %}
+
+      </ul>
+
       <h2 class="heading-small">Formats</h2>
 
       <ul class="list">
@@ -43,7 +58,7 @@
       </ul>
 
       <a href="/search?start={{prevPage}}">Previous</a>
-      <a href="/search?start={{nextPage}}">Previous</a>
+      <a href="/search?start={{nextPage}}">Next</a>
 
     </div>
   </div>

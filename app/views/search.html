@@ -18,7 +18,7 @@
         {% for organisation in organisations %}
 
           <li>
-            <a class="font-xsmall" href="{{organisation.slug}}">{{organisation.name}}</a>
+            <a class="font-xsmall" href="?organisations={{organisation.slug}}">{{organisation.name}}</a>
             <span class="count font-xsmall">{{organisation.count}}</span>
           </li>
 
@@ -50,7 +50,7 @@
         {% for result in results %}
 
           <li class="result">
-            <a href="https://gov.uk/{{result.link}}">{{result.title}}</a>
+            <a href="https://gov.uk/{{result.link}}" target="_blank">{{result.title}}</a>
           </li>
 
         {% endfor %}

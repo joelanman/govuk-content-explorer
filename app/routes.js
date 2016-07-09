@@ -57,11 +57,16 @@ router.get('/search', function(req, res){
 
   var start = (query.start == undefined) ? 0  : Number(query.start);
   var count = (query.count == undefined) ? 30 : Number(query.count);
+  var organisations = query.organisations;
 
   var queryObj = {};
 
   queryObj.start = start;
   queryObj.count = count;
+
+  if (organisations != undefined){
+    queryObj.filter_organisations = organisations;
+  }
 
   var query = querystring.stringify(queryObj);
 

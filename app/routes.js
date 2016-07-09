@@ -1,8 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var request = require('request-promise');
+var querystring = require('querystring');
+
+var log = function(data){
+  console.log(JSON.stringify(data, null, '  '));
+}
 
 router.get('/', function (req, res) {
-  
+
   res.render('index');
 
 });
@@ -40,5 +46,70 @@ router.get('/examples/over-18', function (req, res) {
 });
 
 // add your routes here
+
+router.get('/search', function(req, res){
+
+  // todo:
+  // get facets: mainstream browse, orgs, topics, format
+
+  var query = req.query;
+  var viewData = {};
+
+  var start = (query.start == undefined) ? 0  : Number(query.start);
+  var count = (query.count == undefined) ? 30 : Number(query.count);
+
+  var queryObj = {};
+
+  queryObj.start = start;
+  queryObj.count = count;
+
+  var query = querystring.stringify(queryObj);
+
+  var govukSearchURL = "https://www.gov.uk/api/search.json?" + query;
+
+  console.log(govukSearchURL);
+
+  request(govukSearchURL)
+  .then(function(searchResponse){
+
+    var searchData = JSON.parse(searchResponse);
+    viewData.results = searchData.results;
+
+    log(viewData.results);
+
+    return request("https://www.gov.uk/api/search.json?facet_format=1000&count=0");
+
+  }).then(function(formatsResponse){
+
+    var formatsData = JSON.parse(formatsResponse);
+
+    // log(formatsData);
+
+    viewData.formats = formatsData.facets.format.options.map(function(facet){
+      return {
+        'name' : facet.value.slug.replace(/_/g, ' '),
+        'slug' : facet.value.slug,
+        'count': facet.documents
+      };
+    });
+
+    viewData.formats.sort(function(a,b){
+      if (a.name > b.name){
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    viewData.start = start;
+    viewData.count = count;
+    viewData.nextPage = start + count;
+    viewData.prevPage = start - count;
+    res.render('search', viewData);
+
+  });
+
+});
+
 
 module.exports = router;

@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+  GOV.UK Content Explorer
+{% endblock %}
+
+{% block content %}
+
+<main id="content" role="main">
+  <div class="grid-row">
+
+    <div class="column-third">
+
+      <h2 class="heading-small">Formats</h2>
+
+      <ul class="list">
+
+        {% for format in formats %}
+
+          <li>
+            <a class="font-xsmall" href="{{format.slug}}">{{format.name}}</a>
+            <span class="count font-xsmall">{{format.count}}</span>
+          </li>
+
+        {% endfor %}
+
+      </ul>
+
+    </div>
+
+    <div class="column-two-thirds">
+
+      <ul class="list results">
+
+        {% for result in results %}
+
+          <li class="result">
+            <a href="https://gov.uk/{{result.link}}">{{result.title}}</a>
+          </li>
+
+        {% endfor %}
+
+      </ul>
+
+      <a href="/search?start={{prevPage}}">Previous</a>
+      <a href="/search?start={{nextPage}}">Previous</a>
+
+    </div>
+  </div>
+</main>
+
+{% endblock %}

@@ -25,3 +25,17 @@
 }
 
 // Add extra styles here, or re-organise the Sass files in whichever way makes most sense to you
+
+.count{
+  color: $grey-1;
+}
+
+.results{
+  .result{
+    margin: 1em 0;
+  }
+  a{
+    text-decoration: none;
+    color: $black;
+  }
+}

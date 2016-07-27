@@ -3,6 +3,10 @@ var router = express.Router();
 var request = require('request-promise');
 var querystring = require('querystring');
 
+var numberToCommas = function (input){
+    return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 var log = function(data){
   console.log(JSON.stringify(data, null, '  '));
 }
@@ -58,6 +62,7 @@ router.get('/search', function(req, res){
   var start = (query.start == undefined) ? 0  : Number(query.start);
   var count = (query.count == undefined) ? 30 : Number(query.count);
   var organisations = query.organisations;
+  var formats = query.formats;
 
   var queryObj = {};
 
@@ -66,6 +71,10 @@ router.get('/search', function(req, res){
 
   if (organisations != undefined){
     queryObj.filter_organisations = organisations;
+  }
+
+  if (formats != undefined){
+    queryObj.filter_format = formats;
   }
 
   var query = querystring.stringify(queryObj);
@@ -79,6 +88,7 @@ router.get('/search', function(req, res){
 
     var searchData = JSON.parse(searchResponse);
     viewData.results = searchData.results;
+    viewData.totalResults = numberToCommas(searchData.total);
 
     // log(viewData.results);
 

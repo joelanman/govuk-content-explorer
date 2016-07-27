@@ -33,7 +33,7 @@
         {% for format in formats %}
 
           <li>
-            <a class="font-xsmall" href="{{format.slug}}">{{format.name}}</a>
+            <a class="font-xsmall" href="?formats={{format.slug}}">{{format.name}}</a>
             <span class="count font-xsmall">{{format.count}}</span>
           </li>
 
@@ -44,6 +44,10 @@
     </div>
 
     <div class="column-two-thirds">
+
+      <p>
+        {{totalResults}} results
+      </p>
 
       <ul class="list results">
 

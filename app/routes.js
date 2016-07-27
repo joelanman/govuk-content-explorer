@@ -57,7 +57,10 @@ router.get('/search', function(req, res){
   // get facets: mainstream browse, orgs, topics, format
 
   var query = req.query;
-  var viewData = {};
+  var viewData = {
+    formatsQuery: "",
+    organisationsQuery:""
+  };
 
   var start = (query.start == undefined) ? 0  : Number(query.start);
   var count = (query.count == undefined) ? 30 : Number(query.count);
@@ -71,10 +74,12 @@ router.get('/search', function(req, res){
 
   if (organisations != undefined){
     queryObj.filter_organisations = organisations;
+    viewData.formatsQuery = "&organisations=" + organisations;
   }
 
   if (formats != undefined){
     queryObj.filter_format = formats;
+    viewData.formatsQuery = "&formats=" + formats;
   }
 
   var query = querystring.stringify(queryObj);

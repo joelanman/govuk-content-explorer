@@ -4,42 +4,75 @@
   GOV.UK Content Explorer
 {% endblock %}
 
+{% block page_scripts %}
+  <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+  <script>
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: '',
+      selectElement: document.querySelector('#organisations-picker')
+    })
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: '',
+      selectElement: document.querySelector('#formats-picker')
+    })
+  </script>
+{% endblock %}
+
 {% block content %}
+
+<link rel="stylesheet" href="/public/stylesheets/accessible-autocomplete.min.css" />
 
 <main id="content" role="main">
   <div class="grid-row">
 
     <div class="column-third">
 
-      <h2 class="heading-small">Organisations</h2>
+      <form action="">
 
-      <ul class="list">
+        <div class="form-group">
 
-        {% for organisation in organisations %}
+          <h2 class="heading-small">Organisations</h2>
 
-          <li>
-            <a class="font-xsmall" href="?organisations={{organisation.slug}}">{{organisation.name}}</a>
-            <span class="count font-xsmall">{{organisation.count}}</span>
-          </li>
+          <select name="organisation" id="organisations-picker">
 
-        {% endfor %}
+            <option value="">Select an organisation</option>
 
-      </ul>
+            {% for organisation in organisations %}
 
-      <h2 class="heading-small">Formats</h2>
+              <option value="{{organisation.slug}}">{{organisation.name|safe}} ({{organisation.count}})</option>
 
-      <ul class="list">
+            {% endfor %}
 
-        {% for format in formats %}
+          </select>
 
-          <li>
-            <a class="font-xsmall" href="?formats={{format.slug}}">{{format.name}}</a>
-            <span class="count font-xsmall">{{format.count}}</span>
-          </li>
+        </div>
 
-        {% endfor %}
 
-      </ul>
+        <div class="form-group">
+
+          <h2 class="heading-small">Formats</h2>
+
+          <select name="format" id="formats-picker">
+
+            <option value="">Select a format</option>
+
+            {% for format in formats %}
+
+              <option value="{{format.slug}}">{{format.name|safe}} ({{format.count}})</option>
+
+            {% endfor %}
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <button class="button">Filter</button>
+
+        </div>
+
+      </form>
 
     </div>
 

@@ -54,7 +54,9 @@
         {% for result in results %}
 
           <li class="result">
-            <a href="https://gov.uk/{{result.link}}" target="_blank">{{result.title}}</a>
+            <strong>
+              <a href="https://gov.uk/{{result.link}}" target="_blank">{{result.title}}</a>
+            </strong>
           </li>
 
         {% endfor %}

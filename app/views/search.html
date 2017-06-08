@@ -9,11 +9,15 @@
   <script>
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
-      selectElement: document.querySelector('#organisations-picker')
+      selectElement: document.querySelector('#organisations-picker'),
+      showAllValues: true,
+      autoselect: false
     })
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
-      selectElement: document.querySelector('#formats-picker')
+      selectElement: document.querySelector('#formats-picker'),
+      showAllValues: true,
+      autoselect: false
     })
   </script>
 {% endblock %}

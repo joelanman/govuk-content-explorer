@@ -11,38 +11,12 @@ var log = function (data) {
   console.log(JSON.stringify(data, null, '  '))
 }
 
-router.get('/', function (req, res) {
-  res.render('index')
-})
-
-// Example routes - feel free to delete these
-
-// Passing data into a page
-
-router.get('/examples/template-data', function (req, res) {
-  res.render('examples/template-data', { 'name': 'Foo' })
-})
-
-// Branching
-
-router.get('/examples/over-18', function (req, res) {
-  // get the answer from the query string (eg. ?over18=false)
-  var over18 = req.query.over18
-
-  if (over18 == 'false') {
-    // redirect to the relevant page
-    res.redirect('/examples/under-18')
-  } else {
-    // if over18 is any other value (or is missing) render the page requested
-    res.render('examples/over-18')
-  }
-})
-
 // add your routes here
 
-router.get('/search', function (req, res) {
+router.get('/', function (req, res) {
+
   // todo:
-  // get facets: mainstream browse, orgs, topics, format
+  // get facets
 
   var query = req.query
   var viewData = {}
@@ -59,17 +33,21 @@ router.get('/search', function (req, res) {
 
   if (organisations) {
     queryObj.filter_organisations = organisations
+    viewData.formatsQuery = '&organisations=' + organisations
   }
 
   if (formats) {
     queryObj.filter_format = formats
+    viewData.formatsQuery = '&formats=' + formats
   }
 
   var query = querystring.stringify(queryObj)
 
   var govukSearchURL = 'https://www.gov.uk/api/search.json?' + query
 
-  console.log(govukSearchURL)
+  console.log("govukSearchURL: " + govukSearchURL)
+
+  // get search results
 
   request(govukSearchURL)
   .then(function (searchResponse) {
@@ -80,6 +58,9 @@ router.get('/search', function (req, res) {
     // log(viewData.results);
 
     return request('https://www.gov.uk/api/search.json?facet_format=1000&count=0')
+
+    // get all formats
+
   }).then(function (formatsResponse) {
     var formatsData = JSON.parse(formatsResponse)
 
@@ -102,10 +83,13 @@ router.get('/search', function (req, res) {
     })
 
     return request('https://www.gov.uk/api/search.json?facet_organisations=1000&count=0')
+
+    // get all organisations
+
   }).then(function (organisationsResponse) {
     var organisationsData = JSON.parse(organisationsResponse)
 
-    log(organisationsData)
+    // log(organisationsData)
 
     viewData.organisations = organisationsData.facets.organisations.options.map(function (facet) {
       if (facet.value.title) {
@@ -129,6 +113,7 @@ router.get('/search', function (req, res) {
     viewData.count = count
     viewData.nextPage = start + count
     viewData.prevPage = start - count
+
     res.render('search', viewData)
   })
 })
